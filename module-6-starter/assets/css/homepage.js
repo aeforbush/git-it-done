@@ -16,7 +16,7 @@ var formSubmitHandler = function(event) {
     } else {
         alert("Please enter a GitHub username");
     }
-    console.log(event);
+    //console.log(event);
 };
 
     // defining (user) is just an arbitrary name for the argument being passed through
@@ -25,17 +25,32 @@ var getUserRepos = function(user) {
     var apiUrl = "https://api.github.com/users/" + user + "/repos";
 
     // make a request to the url (call back code)
-    fetch(apiUrl).then(function(response) {
-        console.log(response);
-        // format the response to json
-        response.json().then(function(data) {
-            displayRepos(data, user);
-            console.log(data);
+    fetch(apiUrl)
+    .then(function(response) {
+        // request was successful
+        if (response.ok) {
+            response.json().then(function(data){
+                displayRepos(data, user);
+            })
+        } else {
+            alert("Error: GitHub User Not Found");
+        }
+        //console.log(response);;
+        //console.log(data);
         })
-    })
-};
+        .catch(function(error) {
+            // notice this '.catch()' getting chained onto the end of the '.then()'
+            alert("Unable to connect to GitHub");
+        })
+    };
+
 
 var displayRepos = function(repos, searchTerm) {
+    // check if api returned any repos
+    if (repos.length === 0) {
+        repoContainerEl.textContent = "No repositories found.";
+        return;
+    }
     // clear old content
     repoContainerEl.textContent = "";
     repoSearchTerm.textContent = searchTerm;
@@ -73,8 +88,8 @@ var displayRepos = function(repos, searchTerm) {
         // append container to the dom
         repoContainerEl.appendChild(repoEl);
     }
-    console.log(repos);
-    console.log(searchTerm);
+    //console.log(repos);
+    //console.log(searchTerm);
 }
 
 userFormEl.addEventListener("submit", formSubmitHandler);
