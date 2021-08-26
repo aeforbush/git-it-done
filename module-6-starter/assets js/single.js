@@ -1,4 +1,5 @@
 // reference to the issue container to display <a> dom elements
+var repoNameEl = document.querySelector("#repo-name");
 var issueContainerEl = document.querySelector("#issues-container");
 var limitWarningEl = document.querySelector("#limit-warning");
 
@@ -19,7 +20,7 @@ var getRepoIssues = function(repo) {
                 }
             });
         } else {
-            alert("There was a problem with your request")
+            alert("There was a problem with your request!")
         }
     });
     //console.log(repo);
@@ -31,12 +32,12 @@ var displayIssues = function(issues) {
         issueContainerEl.textContent = "This repo has no open issues!";
         return;
     }
-    // loop over response data
+    // loop over response data (given issues)
     for (var i = 0; i<issues.length; i++) {
         // create a link element to take users to the issues on github
         var issueEl = document.createElement("a");
         issueEl.classList = "list-item flex-row justify-space-between align-center";
-        issueEl.setAttribute("href", "_blank");
+        issueEl.setAttribute("href", issues[i].html_url);
         issueEl.setAttribute("target", "_blank");
 
     // adding content to <a> elements
@@ -69,7 +70,7 @@ var displayIssues = function(issues) {
 var displayWarning = function(repo) {
     // add text to warning container
     limitWarningEl.textContent = "To see more than 30 issues, visit ";
-    // links
+    // create link element
     var linkEl  = document.createElement("a");
     linkEl.textContent = "See More Issues on GitHub.com";
     linkEl.setAttribute("href", "https://github.com/" + repo + "/issues");
