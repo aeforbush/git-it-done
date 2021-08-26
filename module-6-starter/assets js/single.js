@@ -29,11 +29,11 @@ var displayIssues = function(issues) {
         issueEl.classList = "list-item flex-row justify-space-between align-center";
         issueEl.setAttribute("href", "_blank");
         issueEl.setAttribute("target", "_blank");
-    }
+
     // adding content to <a> elements
     // create span to hold issue title
     var titleEl = document.createElement("span");
-    titleEl.textContent = issues[i].titleEl;
+    titleEl.textContent = issues[i].title;
 
     // apend to container
         issueEl.appendChild(titleEl);
@@ -53,6 +53,7 @@ var displayIssues = function(issues) {
 
     // append to issueContainerEl
     issueContainerEl.appendChild(issueEl);
+}
 
 };
 getRepoIssues("facebook/react");
