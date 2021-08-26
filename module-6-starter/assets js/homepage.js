@@ -46,6 +46,21 @@ var getUserRepos = function(user) {
         });
 };
 
+var getFeaturedRepos = function(language) {
+    var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues";
+     fetch(apiUrl).then(function(response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                displayRepos(data.items, language);
+            console.log(response);
+            });
+        } else {
+            alert("Error: GitHub User Not Found");
+        }
+     });
+     
+};
+
 
 var displayRepos = function(repos, searchTerm) {
     // check if api returned any repos
@@ -55,7 +70,7 @@ var displayRepos = function(repos, searchTerm) {
         
     }
     repoSearchTerm.textContent = searchTerm;
-    
+
     // dynanically creating HTML elements from the api response (loop over repos)
     for (var i = 0; i< repos.length; i++) {
         // format repo name
