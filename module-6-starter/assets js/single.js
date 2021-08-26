@@ -29,7 +29,7 @@ var displayIssues = function(issues) {
         issueEl.classList = "list-item flex-row justify-space-between align-center";
         issueEl.setAttribute("href", "_blank");
         issueEl.setAttribute("target", "_blank");
-
+    }
     // adding content to <a> elements
     // create span to hold issue title
     var titleEl = document.createElement("span");
@@ -53,8 +53,6 @@ var displayIssues = function(issues) {
 
     // append to issueContainerEl
     issueContainerEl.appendChild(issueEl);
-    }
 
 };
-getRepoIssues("octocat/react");
-// test 
+getRepoIssues("facebook/react");
