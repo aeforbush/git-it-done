@@ -1,5 +1,6 @@
 // reference to the issue container to display <a> dom elements
 var issueContainerEl = document.querySelector("#issues-container");
+var limitWarningEl = document.querySelector("#limit-warning");
 
 
 
@@ -12,6 +13,10 @@ var getRepoIssues = function(repo) {
             response.json().then(function(data) {
                 // pass response data to dom function
                 displayIssues(data);
+                // check if api has paginated issues
+                if (response.headers.get("link")) {
+                    displayWarning(repo);
+                }
             });
         } else {
             alert("There was a problem with your request")
@@ -22,6 +27,10 @@ var getRepoIssues = function(repo) {
 
 // function that accepts a parameter called issues
 var displayIssues = function(issues) {
+    if (issues.length === 0) {
+        issueContainerEl.textContent = "This repo has no open issues!";
+        return;
+    }
     // loop over response data
     for (var i = 0; i<issues.length; i++) {
         // create a link element to take users to the issues on github
@@ -56,4 +65,18 @@ var displayIssues = function(issues) {
 }
 
 };
-getRepoIssues("facebook/react");
+// function displaying more than 30 repo warning with a repo parameter
+var displayWarning = function(repo) {
+    // add text to warning container
+    limitWarningEl.textContent = "To see more than 30 issues, visit ";
+    // links
+    var linkEl  = document.createElement("a");
+    linkEl.textContent = "See More Issues on GitHub.com";
+    linkEl.setAttribute("href", "https://github.com/" + repo + "/issues");
+    linkEl.setAttribute("target", "_blank");
+
+    // append to warning container
+    limitWarningEl.appendChild(linkEl);
+};
+
+getRepoIssues("expressjs/express");
