@@ -52,9 +52,9 @@ var displayRepos = function(repos, searchTerm) {
     if (repos.length === 0) {
         repoContainerEl.textContent = "No repositories found.";
         return;
+        repoSearchTerm.textContent = searchTerm;
     }
 
-    repoSearchTerm.textContent = searchTerm;
     // dynanically creating HTML elements from the api response (loop over repos)
     for (var i = 0; i< repos.length; i++) {
         // format repo name
@@ -89,7 +89,9 @@ var displayRepos = function(repos, searchTerm) {
 
         // append container to the dom
         repoContainerEl.appendChild(repoEl);
+    
     }
+
     //console.log(repos);
     //console.log(searchTerm);
 };
