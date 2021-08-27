@@ -128,10 +128,7 @@ userFormEl.addEventListener("submit", formSubmitHandler);
 
 
 
-for(i=0; i<languageButtonsEl.length; i++) {
-    languageButtonsEl[i].addEventListener("click", buttonClickHandler);
-  // console.log(languageButtonsEl);
-}
+
 // collect user input to form HTTP requests
 // use an HTTP request's reponse to display data to the user
 // Handle errors that may occur when working with server-side APIs
