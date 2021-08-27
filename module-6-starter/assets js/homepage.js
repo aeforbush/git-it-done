@@ -3,6 +3,7 @@ var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#username");
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
+var languageButtonsEl = document.querySelectorAll(".search-btn");
 
 // this function passes the argument through the getUserRepo function
 var formSubmitHandler = function(event) {
@@ -61,7 +62,6 @@ var getFeaturedRepos = function(language) {
      
 };
 
-
 var displayRepos = function(repos, searchTerm) {
     // check if api returned any repos
     if (repos.length === 0) {
@@ -107,16 +107,31 @@ var displayRepos = function(repos, searchTerm) {
         repoContainerEl.appendChild(repoEl);
     
     }
-
-    //console.log(repos);
-    //console.log(searchTerm);
 };
 
+for(i=0; i<languageButtonsEl.length; i++) {
+    languageButtonsEl[i].addEventListener("click", buttonClickHandler);
+  // console.log(languageButtonsEl);
+};
+
+ function buttonClickHandler (event) {
+     var language = event.target.getAttribute("data-language-type");
+     if (language) {
+         getFeaturedRepos(language);
+         // clear old content
+         repoContainerEl.textContent= "";
+     }
+     console.log(language);
+ };
+
 userFormEl.addEventListener("submit", formSubmitHandler);
-  
 
 
 
+for(i=0; i<languageButtonsEl.length; i++) {
+    languageButtonsEl[i].addEventListener("click", buttonClickHandler);
+  // console.log(languageButtonsEl);
+}
 // collect user input to form HTTP requests
 // use an HTTP request's reponse to display data to the user
 // Handle errors that may occur when working with server-side APIs
