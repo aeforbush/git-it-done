@@ -3,6 +3,7 @@ var userFormEl = document.querySelector("#user-form");
 var nameInputEl = document.querySelector("#username");
 var repoContainerEl = document.querySelector("#repos-container");
 var repoSearchTerm = document.querySelector("#repo-search-term");
+var languageButtonsEl = document.querySelectorAll(".search-btn");
 
 // this function passes the argument through the getUserRepo function
 var formSubmitHandler = function(event) {
@@ -35,7 +36,7 @@ var getUserRepos = function(user) {
             response.json().then(function(data){
                 //console.log(data);
                 displayRepos(data, user);
-            })
+            });
         } else {
             alert("Error: GitHub User Not Found");
         }
@@ -43,26 +44,42 @@ var getUserRepos = function(user) {
         .catch(function(error) {
             // notice this '.catch()' getting chained onto the end of the '.then()'
             alert("Unable to connect to GitHub");
-        })
+        });
 };
 
+var getFeaturedRepos = function(language) {
+    var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues";
+     fetch(apiUrl).then(function(response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                displayRepos(data.items, language);
+            console.log(response);
+            });
+        } else {
+            alert("Error: GitHub User Not Found");
+        }
+     });
+     
+};
 
 var displayRepos = function(repos, searchTerm) {
     // check if api returned any repos
     if (repos.length === 0) {
         repoContainerEl.textContent = "No repositories found.";
         return;
+        
     }
-
     repoSearchTerm.textContent = searchTerm;
-    // loop over repos
+
+    // dynanically creating HTML elements from the api response (loop over repos)
     for (var i = 0; i< repos.length; i++) {
         // format repo name
         var repoName = repos[i].owner.login + "/" + repos[i].name;
 
         // create a container for each repo
-        var repoEl = document.createElement("div");
+        var repoEl = document.createElement("a");
         repoEl.classList = "list-item flex-row justify-space-between align-center";
+        repoEl.setAttribute("href", "./single-repo.html?repo=" + repoName);
 
         // create a span element to hold the formatted repository name
         var titleEl = document.createElement("span");
@@ -88,16 +105,33 @@ var displayRepos = function(repos, searchTerm) {
 
         // append container to the dom
         repoContainerEl.appendChild(repoEl);
+    
     }
-    //console.log(repos);
-    //console.log(searchTerm);
 };
 
+for(i=0; i<languageButtonsEl.length; i++) {
+    languageButtonsEl[i].addEventListener("click", buttonClickHandler);
+  // console.log(languageButtonsEl);
+};
+
+ function buttonClickHandler (event) {
+     var language = event.target.getAttribute("data-language-type");
+     if (language) {
+         getFeaturedRepos(language);
+         // clear old content
+         repoContainerEl.textContent= "";
+     }
+     console.log(language);
+ };
+
 userFormEl.addEventListener("submit", formSubmitHandler);
-  
 
 
 
+for(i=0; i<languageButtonsEl.length; i++) {
+    languageButtonsEl[i].addEventListener("click", buttonClickHandler);
+  // console.log(languageButtonsEl);
+}
 // collect user input to form HTTP requests
 // use an HTTP request's reponse to display data to the user
 // Handle errors that may occur when working with server-side APIs
